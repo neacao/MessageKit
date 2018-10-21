@@ -11,7 +11,7 @@ import MessageInputBar
 
 // MARK: - MessageCellDelegate
 
-extension AdvancedExampleViewController: MessageCellDelegate {
+extension ChatViewController: MessageCellDelegate {
     
     func didTapAvatar(in cell: MessageCollectionViewCell) {
         print("Avatar tapped")
@@ -41,7 +41,7 @@ extension AdvancedExampleViewController: MessageCellDelegate {
 
 // MARK: - MessageLabelDelegate
 
-extension AdvancedExampleViewController: MessageLabelDelegate {
+extension ChatViewController: MessageLabelDelegate {
     
     func didSelectAddress(_ addressComponents: [String: String]) {
         print("Address Selected: \(addressComponents)")
@@ -67,18 +67,18 @@ extension AdvancedExampleViewController: MessageLabelDelegate {
 
 // MARK: - MessageInputBarDelegate
 
-extension AdvancedExampleViewController: MessageInputBarDelegate {
+extension ChatViewController: MessageInputBarDelegate {
     
     func messageInputBar(_ inputBar: MessageInputBar, didPressSendButtonWith text: String) {
         
         for component in inputBar.inputTextView.components {
             
             if let str = component as? String {
-//                let message = MockMessage(text: str, sender: currentSender(), messageId: UUID().uuidString, date: Date())
-//                insertMessage(message)
+                let message = MockMessage(text: str, sender: currentSender(), messageId: UUID().uuidString, date: Date())
+                insertMessage(message)
             } else if let img = component as? UIImage {
-//                let message = MockMessage(image: img, sender: currentSender(), messageId: UUID().uuidString, date: Date())
-//                insertMessage(message)
+                let message = MockMessage(image: img, sender: currentSender(), messageId: UUID().uuidString, date: Date())
+                insertMessage(message)
             }
             
         }

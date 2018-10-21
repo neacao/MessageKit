@@ -10,7 +10,7 @@ import UIKit
 import MessageKit
 import MessageInputBar
 
-extension AdvancedExampleViewController {
+extension ChatViewController {
     
     func setupUI() {
         updateTitleView(title: "MessageKit", subtitle: "2 Online")
