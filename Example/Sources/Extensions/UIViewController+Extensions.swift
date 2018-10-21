@@ -60,7 +60,7 @@ extension UIViewController {
             let newX = widthDiff / 2
             titleLabel.frame.origin.x = newX
         }
-        
+      
         navigationItem.titleView = titleView
     }
     

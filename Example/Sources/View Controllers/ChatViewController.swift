@@ -101,6 +101,7 @@ class ChatViewController: MessagesViewController, MessagesDataSource {
         maintainPositionOnKeyboardFrameChanged = true // default false
         
         messagesCollectionView.addSubview(refreshControl)
+        messagesCollectionView.backgroundColor = .green
         refreshControl.addTarget(self, action: #selector(loadMoreMessages), for: .valueChanged)
     }
     

@@ -78,11 +78,11 @@ final internal class LaunchViewController: UITableViewController {
         let cell = cells[indexPath.row]
         switch cell {
         case "Basic Example":
-            navigationController?.pushViewController(BasicExampleViewController(), animated: true)
+          return
         case "Advanced Example":
             navigationController?.pushViewController(AdvancedExampleViewController(), animated: true)
         case "Embedded Example":
-            navigationController?.pushViewController(MessageContainerController(), animated: true)
+          return
         case "Settings":
             navigationController?.pushViewController(SettingsViewController(), animated: true)
         case "Source Code":
