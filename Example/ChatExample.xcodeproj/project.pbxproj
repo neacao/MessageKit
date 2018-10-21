@@ -27,6 +27,7 @@
 		882B5E951CF7D56E00B6E160 /* ChatExampleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 882B5E931CF7D56E00B6E160 /* ChatExampleTests.swift */; };
 		90F423FC217C48C60063B561 /* ChatViewController+Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90F423FB217C48C60063B561 /* ChatViewController+Configuration.swift */; };
 		90F423FE217C4A220063B561 /* ChatViewController+Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90F423FD217C4A220063B561 /* ChatViewController+Delegate.swift */; };
+		90F42402217C58550063B561 /* ChatViewController+DataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90F42401217C58550063B561 /* ChatViewController+DataSource.swift */; };
 		A444625E4F1C8CB1B33A17F8 /* Pods_ChatExampleUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2AC6E3F5C11E39F57598DBE6 /* Pods_ChatExampleUITests.framework */; };
 		C1DF6DF39F66906000EC76CF /* Pods_ChatExampleTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 56F0AC85B38034EC92CCBC7D /* Pods_ChatExampleTests.framework */; };
 		C7CA53A1B85256A5097E7DC7 /* Pods_ChatExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B316705C4717C3B4C916D62 /* Pods_ChatExample.framework */; };
@@ -93,6 +94,7 @@
 		882B5E941CF7D56E00B6E160 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		90F423FB217C48C60063B561 /* ChatViewController+Configuration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ChatViewController+Configuration.swift"; sourceTree = "<group>"; };
 		90F423FD217C4A220063B561 /* ChatViewController+Delegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ChatViewController+Delegate.swift"; sourceTree = "<group>"; };
+		90F42401217C58550063B561 /* ChatViewController+DataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ChatViewController+DataSource.swift"; sourceTree = "<group>"; };
 		9E0D67CD75BA7EB323FD391B /* Pods-ChatExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChatExample.release.xcconfig"; path = "Pods/Target Support Files/Pods-ChatExample/Pods-ChatExample.release.xcconfig"; sourceTree = "<group>"; };
 		A830E27DBE0B66B89C5D2EB8 /* Pods-ChatExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChatExample.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ChatExample/Pods-ChatExample.debug.xcconfig"; sourceTree = "<group>"; };
 		B0DD3C951C9D064B5E6D6644 /* Pods-ChatExampleUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChatExampleUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ChatExampleUITests/Pods-ChatExampleUITests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -177,6 +179,7 @@
 			children = (
 				385C293B211FF38E0010B4BA /* ChatViewController.swift */,
 				90F423FB217C48C60063B561 /* ChatViewController+Configuration.swift */,
+				90F42401217C58550063B561 /* ChatViewController+DataSource.swift */,
 				90F423FD217C4A220063B561 /* ChatViewController+Delegate.swift */,
 				385C293E211FF38F0010B4BA /* NavigationController.swift */,
 				385C293C211FF38E0010B4BA /* SettingsViewController.swift */,
@@ -525,6 +528,7 @@
 				385C2927211FF33B0010B4BA /* MockSocket.swift in Sources */,
 				882B5E811CF7D53600B6E160 /* AppDelegate.swift in Sources */,
 				385C292D211FF3520010B4BA /* CustomMessageFlowLayout.swift in Sources */,
+				90F42402217C58550063B561 /* ChatViewController+DataSource.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

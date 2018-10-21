@@ -56,6 +56,7 @@ open class CustomCell: UICollectionViewCell {
         case .custom(let data):
             guard let systemMessage = data as? String else { return }
             label.text = systemMessage
+            label.backgroundColor = .brown
         default:
             break
         }
