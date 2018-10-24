@@ -14,28 +14,34 @@ import FirebaseFirestore
 
 class FIRChatTest: QuickSpec {
     override func spec() {
+        
         describe("FIRChat") {
             continueAfterFailure = false
             var instance: FIRChat?
             var mockDelegate: FIRChatTestMock?
             
             beforeEach {
-                instance = FIRChat.shared
                 mockDelegate = FIRChatTestMock()
+                instance = FIRChat.shared
                 instance?.configure(.dev, googleInfoFilePath: nil, delegate: mockDelegate)
-                instance?.subscribeChannel("channelTestID")
             }
             
-            afterEach {
-                instance?.unsubscribeChannel()
-            }
-            
-            it("receive message") {
-                // Enable self script to run this
-                expect(instance).toNotEventually(beNil())
-                expect(mockDelegate).toNotEventually(beNil())
-                expect(mockDelegate!._error).toNotEventually(beTrue(), timeout: 5.0)
-                expect(mockDelegate!._received).toEventually(beTrue(), timeout: 5.0)
+            context("onSubscribeChannel") {
+                let owner = User(id: "subscribe sender id", name: "subscribe sender name")
+                let mockMessage = Message(id: "messageID", content: "subscribe content", owner: owner)
+                
+                beforeEach {
+                    instance?.subscribeChannel("subscribeID")
+                }
+                
+                it("Receive previous messages") {
+                    expect(instance).toNot(beNil())
+                    expect(mockDelegate).toNot(beNil())
+                    expect(mockDelegate!._error).toEventually(beFalse(), timeout: 2)
+                    expect(mockDelegate!._received).toEventually(beTrue(), timeout: 2)
+                    expect(mockDelegate!._msgReceived).toEventuallyNot(beNil(), timeout: 2)
+                    expect(mockDelegate!._msgReceived).toEventually(equal(mockMessage), timeout: 2)
+                }
             }
         }
     }
@@ -45,9 +51,10 @@ class FIRChatTest: QuickSpec {
 // MARK: Mock delegate
 class FIRChatTestMock: FIRChatDelegate {
     
-    var _sent       : Bool = false
-    var _received   : Bool = false
-    var _error      : Bool = false
+    var _sent           : Bool = false
+    var _received       : Bool = false
+    var _msgReceived    : Message? = nil
+    var _error          : Bool = false
     
     func onError(_ error: Error?) {
         print("[TEST] got error: \(error!.localizedDescription)")
@@ -55,6 +62,7 @@ class FIRChatTestMock: FIRChatDelegate {
     }
     
     func onReceiveMessage(_ message: Message) {
+        _msgReceived = message
         _received = true
     }
     
