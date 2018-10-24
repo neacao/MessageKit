@@ -2,21 +2,28 @@
 
 ### Loop & push message to firebase
 
+
 loop_push_message() {
 	for i in {1..5}; do
 		sleep 2s
-		
+		var=`date`
 		curl -X POST \
 		-H "Content-Type: application/json" \
 		-d '{
 		"fields": {
 		"content": { "stringValue": "message of bot at '`date +%s`'" },
 		"senderID": { "stringValue": "botID" }, 
-		"senderName": { "stringValue": "botName" } 
+		"senderName": { "stringValue": "botName" }, 
+		"createdAt": { "timestampValue": "'`date +"%Y-%m-%dT%H:%M:%S.000000000Z"`'" }
 		}
 		}' \
-		"https://firestore.googleapis.com/v1beta1/projects/fir-chat-4d08f/databases/(default)/documents/channels/channelTestID/messages?&key="$FIREBASE_KEY
+		"https://firestore.googleapis.com/v1beta1/projects/fir-chat-4d08f/databases/(default)/documents/channelsTest/subscribeID/messages?&key="$FIREBASE_KEY
 	done
 }
 
-loop_push_message
+
+if [[ -z "${FIREBASE_KEY}" ]]; then
+	echo "FIREBASE_KEY was not exported yet !!!"
+else
+	loop_push_message
+fi
