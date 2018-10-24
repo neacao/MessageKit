@@ -29,8 +29,6 @@ final class ChatViewController: MessagesViewController, MessagesDataSource {
     
     let outgoingAvatarOverlap: CGFloat = 17.5
     
-    var messageList: [MockMessage] = []
-    
     let refreshControl = UIRefreshControl()
     
     let formatter: DateFormatter = {
@@ -39,6 +37,10 @@ final class ChatViewController: MessagesViewController, MessagesDataSource {
         return formatter
     }()
     
+    var messageList: [Message]!
+    
+    private var dataManager: FIRChat?
+    
     override func viewDidLoad() {
         messagesCollectionView = MessagesCollectionView(frame: .zero,
                                                         collectionViewLayout: CustomMessagesFlowLayout())
@@ -46,48 +48,27 @@ final class ChatViewController: MessagesViewController, MessagesDataSource {
         
         super.viewDidLoad()
         self.setupUI()
-        
-        loadFirstMessages()
+        self.setupManager()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        MockSocket.shared
-            .connect(with: [SampleData.shared.steven, SampleData.shared.wu])
-            .onTypingStatus { [weak self] in
-                self?.setTypingIndicatorHidden(false)
-            }.onNewMessage { [weak self] message in
-                self?.setTypingIndicatorHidden(true, performUpdates: {
-                    print("perform update done")
-                })
-                self?.insertMessage(message)
-        }
+        dataManager?.subscribeChannel("subscribeID")
     }
     
     // MARK: - Helpers
     
-    func loadFirstMessages() {
-        // Load through network
-        // Append to local list
-        // Make collection refresh
-        // Scroll to bottom
-        
-        DispatchQueue.global(qos: .userInitiated).async {
-            let count = UserDefaults.standard.mockMessagesCount()
-            SampleData.shared.getAdvancedMessages(count: count) { messages in
-                self.messageList = messages
-
-                DispatchQueue.main.async {
-                    self.messagesCollectionView.reloadData()
-                    self.messagesCollectionView.scrollToBottom()
-                }
-            }
-        }
+    func setupManager() {
+        messageList = []
+        dataManager = FIRChat.shared
+        dataManager?.configure(.dev, googleInfoFilePath: nil, delegate: self)
     }
     
     @objc
     func loadMoreMessages() {
+        refreshControl.endRefreshing()
+        
         // Load through network
         // Insert to first index of local list
         // Make list reload & keep offset
@@ -104,8 +85,12 @@ final class ChatViewController: MessagesViewController, MessagesDataSource {
 //            }
 //        }
     }
+
+    func sendMessage(_ message: Message) {
+        dataManager?.sendMessage(message)
+    }
     
-    func insertMessage(_ message: MockMessage) {
+    func insertMessage(_ message: Message) {
         messageList.append(message)
         
         // Reload last section to update header/footer labels and insert a new one
@@ -123,7 +108,8 @@ final class ChatViewController: MessagesViewController, MessagesDataSource {
 
     // MARK: UICollectionViewDataSource
     
-    public override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    public override func collectionView(_ collectionView: UICollectionView,
+                                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         guard let messagesDataSource = messagesCollectionView.messagesDataSource else {
             fatalError("Ouch. nil data source for messages")
@@ -167,5 +153,20 @@ extension ChatViewController {
     
     func setTypingIndicatorHidden(_ isHidden: Bool, performUpdates updates: (() -> Void)? = nil) {
         updateTitleView(title: "MessageKit", subtitle: isHidden ? "2 Online" : "Typing...")
+    }
+}
+
+// MARK: DataManagerDelegate
+extension ChatViewController: FIRChatDelegate {
+    func onReceiveMessage(_ message: Message) {
+        insertMessage(message)
+    }
+        
+    func onSendMessage(_ message: Message) {
+        LOG("=> Did sent message")
+    }
+    
+    func onError(_ error: Error?) {
+        LOG("[ERROR] \(error?.localizedDescription ?? "")")
     }
 }

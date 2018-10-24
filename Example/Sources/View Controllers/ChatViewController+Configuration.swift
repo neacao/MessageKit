@@ -35,6 +35,7 @@ extension ChatViewController {
         
         // Hide the outgoing avatar and adjust the label alignment to line up with the messages
         layout?.setMessageOutgoingAvatarSize(.zero)
+        layout?.setMessageIncomingAvatarSize(.zero)
         layout?.setMessageOutgoingMessageTopLabelAlignment(LabelAlignment(textAlignment: .right,
                                                                           textInsets: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 8)))
         layout?.setMessageOutgoingMessageBottomLabelAlignment(LabelAlignment(textAlignment: .right,
@@ -47,10 +48,10 @@ extension ChatViewController {
         layout?.setMessageIncomingMessagePadding(UIEdgeInsets(top: -outgoingAvatarOverlap, left: -18,
                                                               bottom: outgoingAvatarOverlap, right: 18))
         
-        layout?.setMessageIncomingAccessoryViewSize(CGSize(width: 30, height: 30))
-        layout?.setMessageIncomingAccessoryViewPadding(HorizontalEdgeInsets(left: 8, right: 0))
-        layout?.setMessageOutgoingAccessoryViewSize(CGSize(width: 30, height: 30))
-        layout?.setMessageOutgoingAccessoryViewPadding(HorizontalEdgeInsets(left: 0, right: 8))
+//        layout?.setMessageIncomingAccessoryViewSize(CGSize(width: 30, height: 30))
+//        layout?.setMessageIncomingAccessoryViewPadding(HorizontalEdgeInsets(left: 8, right: 0))
+//        layout?.setMessageOutgoingAccessoryViewSize(CGSize(width: 30, height: 30))
+//        layout?.setMessageOutgoingAccessoryViewPadding(HorizontalEdgeInsets(left: 0, right: 8))
         
         messagesCollectionView.messagesLayoutDelegate = self
         messagesCollectionView.messagesDisplayDelegate = self
@@ -126,7 +127,6 @@ extension ChatViewController {
             .configure {
                 $0.spacing = .fixed(10)
                 $0.image = UIImage(named: named)?.withRenderingMode(.alwaysTemplate)
-                $0.backgroundColor = .green
                 $0.setSize(CGSize(width: 25, height: 25), animated: false)
                 $0.tintColor = UIColor(white: 0.8, alpha: 1)
             }.onSelected {

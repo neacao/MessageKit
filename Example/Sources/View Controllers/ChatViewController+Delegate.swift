@@ -71,18 +71,17 @@ extension ChatViewController: MessageLabelDelegate {
 extension ChatViewController: MessageInputBarDelegate {
     
     func messageInputBar(_ inputBar: MessageInputBar, didPressSendButtonWith text: String) {
-        
-        for component in inputBar.inputTextView.components {
-            
-            if let str = component as? String {
-                let message = MockMessage(text: str, sender: currentSender(), messageId: UUID().uuidString, date: Date())
-                insertMessage(message)
-            } else if let img = component as? UIImage {
-                let message = MockMessage(image: img, sender: currentSender(), messageId: UUID().uuidString, date: Date())
-                insertMessage(message)
+        inputBar.inputTextView.components.forEach {
+            if let str = $0 as? String {
+                let message = Message(content: str)
+                sendMessage(message)
             }
-            
+//            else if let img = component as? UIImage {
+//                let message = MockMessage(image: img, sender: currentSender(), messageId: UUID().uuidString, date: Date())
+//                insertMessage(message)
+//            }
         }
+        
         inputBar.inputTextView.text = String()
         messagesCollectionView.scrollToBottom(animated: true)
     }
@@ -95,25 +94,35 @@ extension ChatViewController: MessagesDisplayDelegate {
     
     // MARK: - Text Messages
     
-    func textColor(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> UIColor {
+    func textColor(for message: MessageType,
+                   at indexPath: IndexPath,
+                   in messagesCollectionView: MessagesCollectionView) -> UIColor {
         return isFromCurrentSender(message: message) ? .white : .darkText
     }
     
-    func detectorAttributes(for detector: DetectorType, and message: MessageType, at indexPath: IndexPath) -> [NSAttributedString.Key: Any] {
+    func detectorAttributes(for detector: DetectorType,
+                            and message: MessageType,
+                            at indexPath: IndexPath) -> [NSAttributedString.Key: Any] {
         return MessageLabel.defaultAttributes
     }
     
-    func enabledDetectors(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> [DetectorType] {
+    func enabledDetectors(for message: MessageType,
+                          at indexPath: IndexPath,
+                          in messagesCollectionView: MessagesCollectionView) -> [DetectorType] {
         return [.url, .address, .phoneNumber, .date, .transitInformation]
     }
     
     // MARK: - All Messages
     
-    func backgroundColor(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> UIColor {
+    func backgroundColor(for message: MessageType,
+                         at indexPath: IndexPath,
+                         in messagesCollectionView: MessagesCollectionView) -> UIColor {
         return isFromCurrentSender(message: message) ? .primaryColor : UIColor(red: 230/255, green: 230/255, blue: 230/255, alpha: 1)
     }
     
-    func messageStyle(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> MessageStyle {
+    func messageStyle(for message: MessageType,
+                      at indexPath: IndexPath,
+                      in messagesCollectionView: MessagesCollectionView) -> MessageStyle {
         
         var corners: UIRectCorner = []
         
@@ -139,57 +148,73 @@ extension ChatViewController: MessagesDisplayDelegate {
         
         return .custom { view in
             let radius: CGFloat = 16
-            let path = UIBezierPath(roundedRect: view.bounds, byRoundingCorners: corners, cornerRadii: CGSize(width: radius, height: radius))
+            let path = UIBezierPath(roundedRect: view.bounds,
+                                    byRoundingCorners: corners,
+                                    cornerRadii: CGSize(width: radius, height: radius))
             let mask = CAShapeLayer()
             mask.path = path.cgPath
             view.layer.mask = mask
         }
     }
     
-    func configureAvatarView(_ avatarView: AvatarView, for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) {
-        let avatar = SampleData.shared.getAvatarFor(sender: message.sender)
-        avatarView.set(avatar: avatar)
-        avatarView.isHidden = isNextMessageSameSender(at: indexPath)
-        avatarView.layer.borderWidth = 2
-        avatarView.layer.borderColor = UIColor.primaryColor.cgColor
+    func configureAvatarView(_ avatarView: AvatarView,
+                             for message: MessageType,
+                             at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) {
+//        let avatar = SampleData.shared.getAvatarFor(sender: message.sender)
+//        avatarView.set(avatar: avatar)
+//        avatarView.isHidden = isNextMessageSameSender(at: indexPath)
+//        avatarView.layer.borderWidth = 2
+//        avatarView.layer.borderColor = UIColor.primaryColor.cgColor
+        avatarView.isHidden = true
     }
     
-    func configureAccessoryView(_ accessoryView: UIView, for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) {
+//    func configureAccessoryView(_ accessoryView: UIView, for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) {
         // Cells are reused, so only add a button here once. For real use you would need to
         // ensure any subviews are removed if not needed
-        guard accessoryView.subviews.isEmpty else { return }
-        let button = UIButton(type: .infoLight)
-        button.tintColor = .primaryColor
-        accessoryView.addSubview(button)
-        button.frame = accessoryView.bounds
-        button.isUserInteractionEnabled = false // respond to accessoryView tap through `MessageCellDelegate`
-        accessoryView.layer.cornerRadius = accessoryView.frame.height / 2
-        accessoryView.backgroundColor = UIColor.primaryColor.withAlphaComponent(0.3)
-    }
+//        guard accessoryView.subviews.isEmpty else { return }
+//        let button = UIButton(type: .infoLight)
+//        button.tintColor = .primaryColor
+//        accessoryView.addSubview(button)
+//        button.frame = accessoryView.bounds
+//        button.isUserInteractionEnabled = false // respond to accessoryView tap through `MessageCellDelegate`
+//        accessoryView.layer.cornerRadius = accessoryView.frame.height / 2
+//        accessoryView.backgroundColor = UIColor.primaryColor.withAlphaComponent(0.3)
+//    }
     
-    // MARK: - Location Messages
-    
-    func annotationViewForLocation(message: MessageType, at indexPath: IndexPath, in messageCollectionView: MessagesCollectionView) -> MKAnnotationView? {
-        let annotationView = MKAnnotationView(annotation: nil, reuseIdentifier: nil)
-        let pinImage = #imageLiteral(resourceName: "ic_map_marker")
-        annotationView.image = pinImage
-        annotationView.centerOffset = CGPoint(x: 0, y: -pinImage.size.height / 2)
-        return annotationView
-    }
-    
-    func animationBlockForLocation(message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> ((UIImageView) -> Void)? {
-        return { view in
-            view.layer.transform = CATransform3DMakeScale(2, 2, 2)
-            UIView.animate(withDuration: 0.6, delay: 0, usingSpringWithDamping: 0.9, initialSpringVelocity: 0, options: [], animations: {
-                view.layer.transform = CATransform3DIdentity
-            }, completion: nil)
-        }
-    }
-    
-    func snapshotOptionsForLocation(message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> LocationMessageSnapshotOptions {
-        
-        return LocationMessageSnapshotOptions(showsBuildings: true, showsPointsOfInterest: true, span: MKCoordinateSpan(latitudeDelta: 10, longitudeDelta: 10))
-    }
+//    // MARK: - Location Messages
+//
+//    func annotationViewForLocation(message: MessageType, at indexPath: IndexPath, in messageCollectionView: MessagesCollectionView) -> MKAnnotationView? {
+//        let annotationView = MKAnnotationView(annotation: nil, reuseIdentifier: nil)
+//        let pinImage = #imageLiteral(resourceName: "ic_map_marker")
+//        annotationView.image = pinImage
+//        annotationView.centerOffset = CGPoint(x: 0, y: -pinImage.size.height / 2)
+//        return annotationView
+//    }
+//
+//    func animationBlockForLocation(message: MessageType,
+//                                   at indexPath: IndexPath,
+//                                   in messagesCollectionView: MessagesCollectionView) -> ((UIImageView) -> Void)? {
+//        return { view in
+//            view.layer.transform = CATransform3DMakeScale(2, 2, 2)
+//            UIView.animate(withDuration: 0.6,
+//                           delay: 0,
+//                           usingSpringWithDamping: 0.9,
+//                           initialSpringVelocity: 0,
+//                           options: [],
+//                           animations: {
+//                view.layer.transform = CATransform3DIdentity
+//            }, completion: nil)
+//        }
+//    }
+//
+//    func snapshotOptionsForLocation(message: MessageType,
+//                                    at indexPath: IndexPath,
+//                                    in messagesCollectionView: MessagesCollectionView) -> LocationMessageSnapshotOptions {
+//
+//        return LocationMessageSnapshotOptions(showsBuildings: true,
+//                                              showsPointsOfInterest: true,
+//                                              span: MKCoordinateSpan(latitudeDelta: 10, longitudeDelta: 10))
+//    }
     
 }
 

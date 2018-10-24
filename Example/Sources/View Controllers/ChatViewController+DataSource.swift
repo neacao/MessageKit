@@ -10,7 +10,8 @@ import MessageKit
 
 extension ChatViewController {
     func currentSender() -> Sender {
-        return SampleData.shared.currentSender
+        let me = AppSetting.me
+        return Sender(id: me.id, displayName: me.name)
     }
     
     func numberOfSections(in messagesCollectionView: MessagesCollectionView) -> Int {
@@ -39,9 +40,9 @@ extension ChatViewController {
     }
     
     func messageBottomLabelAttributedText(for message: MessageType, at indexPath: IndexPath) -> NSAttributedString? {
-        
         if !isNextMessageSameSender(at: indexPath) && isFromCurrentSender(message: message) {
-            return NSAttributedString(string: "Delivered", attributes: [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: .caption1)])
+            return NSAttributedString(string: "Delivered",
+                                      attributes: [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: .caption1)])
         }
         return nil
     }

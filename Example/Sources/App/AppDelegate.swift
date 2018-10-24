@@ -32,13 +32,19 @@ final internal class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
-        FirebaseApp.configure()
+        setup()
         
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.rootViewController = NavigationController(rootViewController: ChatViewController())
         window?.makeKeyAndVisible()
         
         return true
+    }
+    
+    func setup() {
+        FirebaseApp.configure()
+        AppSetting.displayName = "neacao"
+        AppSetting.userID = "neacaoID"
     }
 
 }

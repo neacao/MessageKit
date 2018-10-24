@@ -15,15 +15,16 @@ struct Message {
     var id: String?
     let content: String
     let owner: User
+    let createdAt: Date
     
     init(content: String) {
-        self.content = content
-        self.owner = AppSetting.me
+        self.init(id: "", content: content, owner: AppSetting.me)
     }
     
     init(id: String, content: String, owner: User) {
         self.id = id
         self.content = content
+        self.createdAt = Date()
         self.owner = owner
     }
     
@@ -31,12 +32,14 @@ struct Message {
         let data = document.data()
         
         guard let owner = User(json: data),
-            let content = data["content"] as? String
+            let content = data["content"] as? String,
+            let createdAt = (data["createdAt"] as? Timestamp)?.dateValue()
             else { return nil }
         
         self.id = document.documentID
         self.owner = owner
         self.content = content
+        self.createdAt = createdAt
     }
 }
 
@@ -46,11 +49,11 @@ extension Message: MessageType {
     }
     
     var messageId: String {
-        return self.id ?? ""
+        return self.id ?? "<unknownMsgID>"
     }
     
     var sentDate: Date {
-        return Date()
+        return self.createdAt
     }
     
     var kind: MessageKind {
@@ -63,8 +66,9 @@ extension Message: DatabasePresentation {
         let data = [
             "senderID": owner.id,
             "senderName": owner.name,
-            "content": content
-        ]
+            "content": content,
+            "createdAt": createdAt
+            ] as [String: Any]
         return data
     }
 }
