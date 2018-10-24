@@ -68,11 +68,16 @@ final class ChatViewController: MessagesViewController, MessagesDataSource {
     // MARK: - Helpers
     
     func loadFirstMessages() {
+        // Load through network
+        // Append to local list
+        // Make collection refresh
+        // Scroll to bottom
+        
         DispatchQueue.global(qos: .userInitiated).async {
             let count = UserDefaults.standard.mockMessagesCount()
             SampleData.shared.getAdvancedMessages(count: count) { messages in
                 self.messageList = messages
-                
+
                 DispatchQueue.main.async {
                     self.messagesCollectionView.reloadData()
                     self.messagesCollectionView.scrollToBottom()
@@ -83,20 +88,26 @@ final class ChatViewController: MessagesViewController, MessagesDataSource {
     
     @objc
     func loadMoreMessages() {
-        DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: .now() + 1) {
-            SampleData.shared.getAdvancedMessages(count: 20) { messages in
-                self.messageList.insert(contentsOf: messages, at: 0)
-                
-                DispatchQueue.main.async {
-                    self.messagesCollectionView.reloadDataAndKeepOffset()
-                    self.refreshControl.endRefreshing()
-                }
-            }
-        }
+        // Load through network
+        // Insert to first index of local list
+        // Make list reload & keep offset
+        // Force refresh control end refreshing
+        
+//        DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: .now() + 1) {
+//            SampleData.shared.getAdvancedMessages(count: 20) { messages in
+//                self.messageList.insert(contentsOf: messages, at: 0)
+//
+//                DispatchQueue.main.async {
+//                    self.messagesCollectionView.reloadDataAndKeepOffset()
+//                    self.refreshControl.endRefreshing()
+//                }
+//            }
+//        }
     }
     
     func insertMessage(_ message: MockMessage) {
         messageList.append(message)
+        
         // Reload last section to update header/footer labels and insert a new one
         messagesCollectionView.performBatchUpdates({
             messagesCollectionView.insertSections([messageList.count - 1])
@@ -109,6 +120,28 @@ final class ChatViewController: MessagesViewController, MessagesDataSource {
             }
         })
     }
+
+    // MARK: UICollectionViewDataSource
+    
+    public override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        
+        guard let messagesDataSource = messagesCollectionView.messagesDataSource else {
+            fatalError("Ouch. nil data source for messages")
+        }
+        
+        let message = messagesDataSource.messageForItem(at: indexPath, in: messagesCollectionView)
+        if case .custom = message.kind {
+            let cell = messagesCollectionView.dequeueReusableCell(CustomCell.self, for: indexPath)
+            cell.configure(with: message, at: indexPath, and: messagesCollectionView)
+            return cell
+        }
+        return super.collectionView(collectionView, cellForItemAt: indexPath)
+    }
+}
+
+// MARK: Helpers
+
+extension ChatViewController {
     
     func isLastSectionVisible() -> Bool {
         guard !messageList.isEmpty else { return false }
@@ -134,22 +167,5 @@ final class ChatViewController: MessagesViewController, MessagesDataSource {
     
     func setTypingIndicatorHidden(_ isHidden: Bool, performUpdates updates: (() -> Void)? = nil) {
         updateTitleView(title: "MessageKit", subtitle: isHidden ? "2 Online" : "Typing...")
-    }
-
-    // MARK: UICollectionViewDataSource
-    
-    public override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        
-        guard let messagesDataSource = messagesCollectionView.messagesDataSource else {
-            fatalError("Ouch. nil data source for messages")
-        }
-        
-        let message = messagesDataSource.messageForItem(at: indexPath, in: messagesCollectionView)
-        if case .custom = message.kind {
-            let cell = messagesCollectionView.dequeueReusableCell(CustomCell.self, for: indexPath)
-            cell.configure(with: message, at: indexPath, and: messagesCollectionView)
-            return cell
-        }
-        return super.collectionView(collectionView, cellForItemAt: indexPath)
     }
 }

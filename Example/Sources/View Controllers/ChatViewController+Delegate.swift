@@ -10,7 +10,6 @@ import MessageKit
 import MessageInputBar
 import MapKit
 
-
 // MARK: - MessageCellDelegate
 
 extension ChatViewController: MessageCellDelegate {
