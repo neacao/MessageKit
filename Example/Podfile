@@ -1,16 +1,32 @@
 platform :ios, '9.0'
 
+def firebase
+    pod 'Firebase/Core'
+    pod 'Firebase/Auth'
+    pod 'Firebase/Messaging'
+    pod 'Firebase/Firestore'
+    pod 'Firebase/Storage'
+end
+
+def messagekit
+    pod 'MessageKit', :path => '../'
+    pod 'MessageInputBar', :git => 'https://github.com/MessageKit/MessageInputBar.git', :branch => 'master'
+end
+
+
 target 'ChatExample' do
-  use_frameworks!
-  pod 'MessageKit', :path => '../'
-  pod 'MessageInputBar', :git => 'https://github.com/MessageKit/MessageInputBar.git', :branch => 'master'
-
-target 'ChatExampleTests' do
-  inherit! :search_paths
-end
-
-target 'ChatExampleUITests' do
-  inherit! :search_paths
-end
-
+    use_frameworks!
+    firebase
+    messagekit
+    
+    target 'ChatExampleTests' do
+        inherit! :search_paths
+        pod 'Quick'
+        pod 'Nimble'
+    end
+    
+    target 'ChatExampleUITests' do
+        inherit! :search_paths
+    end
+    
 end
