@@ -6,8 +6,7 @@
 //  Copyright © 2018 MessageKit. All rights reserved.
 //
 
-import UIKit
-
-class FIRChat_Addictions: NSObject {
-
+enum AppContext: Int {
+    case dev
+    case release
 }

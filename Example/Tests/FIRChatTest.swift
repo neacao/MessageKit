@@ -43,6 +43,7 @@ class FIRChatTest: QuickSpec {
                     expect(mockDelegate!._msgReceived).toEventually(equal(mockMessage), timeout: 2)
                 }
             }
+            
         }
     }
 

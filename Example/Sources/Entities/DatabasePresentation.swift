@@ -6,8 +6,8 @@
 //  Copyright © 2018 MessageKit. All rights reserved.
 //
 
-import UIKit
+import Foundation
 
-class DatabasePresentation: NSObject {
-
+protocol DatabasePresentation {
+    var representation: [String: Any] { get }
 }
