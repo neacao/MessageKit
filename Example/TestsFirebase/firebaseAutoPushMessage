@@ -3,7 +3,9 @@
 ### Loop & push message to firebase
 
 loop_push_message() {
-	for i in {1..1}; do
+	for i in {1..5}; do
+		sleep 2s
+		
 		curl -X POST \
 		-H "Content-Type: application/json" \
 		-d '{
@@ -14,7 +16,6 @@ loop_push_message() {
 		}
 		}' \
 		"https://firestore.googleapis.com/v1beta1/projects/fir-chat-4d08f/databases/(default)/documents/channels/channelTestID/messages?&key="$FIREBASE_KEY
-		sleep 5s
 	done
 }
 
