@@ -130,37 +130,6 @@ final class ChatViewController: MessagesViewController, MessagesDataSource {
     }
 }
 
-// MARK: Helpers
-
-extension ChatViewController {
-    
-    func isLastSectionVisible() -> Bool {
-        guard !messageList.isEmpty else { return false }
-        
-        let lastIndexPath = IndexPath(item: 0, section: messageList.count - 1)
-        
-        return mainclv.indexPathsForVisibleItems.contains(lastIndexPath)
-    }
-    
-    func isTimeLabelVisible(at indexPath: IndexPath) -> Bool {
-        return indexPath.section % 3 == 0 && !isPreviousMessageSameSender(at: indexPath)
-    }
-    
-    func isPreviousMessageSameSender(at indexPath: IndexPath) -> Bool {
-        guard indexPath.section - 1 >= 0 else { return false }
-        return messageList[indexPath.section].sender == messageList[indexPath.section - 1].sender
-    }
-    
-    func isNextMessageSameSender(at indexPath: IndexPath) -> Bool {
-        guard indexPath.section + 1 < messageList.count else { return false }
-        return messageList[indexPath.section].sender == messageList[indexPath.section + 1].sender
-    }
-    
-    func setTypingIndicatorHidden(_ isHidden: Bool, performUpdates updates: (() -> Void)? = nil) {
-        updateTitleView(title: "MessageKit", subtitle: isHidden ? "2 Online" : "Typing...")
-    }
-}
-
 // MARK: DataManagerDelegate
 extension ChatViewController: FIRChatDelegate {
     func onLoadMoreMessages(_ messages: [Message]) {

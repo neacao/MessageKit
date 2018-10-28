@@ -18,20 +18,28 @@ extension ChatViewController {
         return messageList.count
     }
     
-    func messageForItem(at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> MessageType {
+    func messageForItem(at indexPath: IndexPath,
+                        in messagesCollectionView: MessagesCollectionView) -> MessageType {
+        
         return messageList[indexPath.section]
     }
     
     // MARK: - MessagesDataSource
     
-    func cellTopLabelAttributedText(for message: MessageType, at indexPath: IndexPath) -> NSAttributedString? {
+    func cellTopLabelAttributedText(for message: MessageType,
+                                    at indexPath: IndexPath) -> NSAttributedString? {
+        
         if isTimeLabelVisible(at: indexPath) {
-            return NSAttributedString(string: MessageKitDateFormatter.shared.string(from: message.sentDate), attributes: [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 10), NSAttributedString.Key.foregroundColor: UIColor.darkGray])
+            return NSAttributedString(string: MessageKitDateFormatter.shared.string(from: message.sentDate),
+                                      attributes: [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 10),
+                                                   NSAttributedString.Key.foregroundColor: UIColor.darkGray])
         }
         return nil
     }
     
-    func messageTopLabelAttributedText(for message: MessageType, at indexPath: IndexPath) -> NSAttributedString? {
+    func messageTopLabelAttributedText(for message: MessageType,
+                                       at indexPath: IndexPath) -> NSAttributedString? {
+        
         if !isPreviousMessageSameSender(at: indexPath) {
             let name = message.sender.displayName
             return NSAttributedString(string: name, attributes: [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: .caption1)])
@@ -39,7 +47,9 @@ extension ChatViewController {
         return nil
     }
     
-    func messageBottomLabelAttributedText(for message: MessageType, at indexPath: IndexPath) -> NSAttributedString? {
+    func messageBottomLabelAttributedText(for message: MessageType,
+                                          at indexPath: IndexPath) -> NSAttributedString? {
+        
         if !isNextMessageSameSender(at: indexPath) && isFromCurrentSender(message: message) {
             return NSAttributedString(string: "Delivered",
                                       attributes: [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: .caption1)])

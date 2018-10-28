@@ -20,7 +20,7 @@ class AskChatRoomVC: UIViewController {
         self.view.addSubview(btn)
         
         btn.addTarget(self, action: #selector(joinChatRoomDidTap), for: .touchUpInside)
-        btn.setTitle("Enter Chat Room ID", for: .normal)
+        btn.setTitle("Join Chat Room", for: .normal)
         btn.setTitleColor(.white, for: .normal)
         btn.frame = CGRect(x: 0, y: 0, width: 200, height: 50)
         btn.layer.cornerRadius = 25.0

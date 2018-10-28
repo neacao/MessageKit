@@ -64,4 +64,8 @@ extension UIViewController {
         navigationItem.titleView = titleView
     }
     
+    func updateTitleView(title: String) {
+        self.navigationItem.title = title
+    }
+    
 }
