@@ -40,10 +40,9 @@ final internal class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func setup() {
-        
         AppSetting.displayName = TARGET_OS_SIMULATOR != 0 ? "simulator" : "neacao"
         AppSetting.userID = TARGET_OS_SIMULATOR != 0 ? "simulatorID" : "neacaoID"
-        AppSetting.appContext = .dev
+        AppSetting.appContext = .automate
     }
 
 }

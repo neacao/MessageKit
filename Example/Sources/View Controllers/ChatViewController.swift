@@ -42,6 +42,10 @@ final class ChatViewController: MessagesViewController, MessagesDataSource {
     
     private var dataManager: FIRChat?
     
+    deinit {
+        dataManager?.unsubscribeChannel()
+    }
+    
     override func viewDidLoad() {
         messagesCollectionView = MessagesCollectionView(frame: .zero,
                                                         collectionViewLayout: CustomMessagesFlowLayout())
@@ -55,7 +59,6 @@ final class ChatViewController: MessagesViewController, MessagesDataSource {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
         if let _roomID = roomID {
             dataManager?.subscribeChannel(_roomID)
         }
@@ -63,7 +66,6 @@ final class ChatViewController: MessagesViewController, MessagesDataSource {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
         mainclv.scrollToBottom(animated: true)
     }
     
@@ -73,25 +75,18 @@ final class ChatViewController: MessagesViewController, MessagesDataSource {
         messageList = []
         
         if AppSetting.appContext != .test {
-            dataManager = FIRChat.shared
-            dataManager?.configure(.dev, delegate: self)
+//            dataManager = FIRChat.shared
+//            dataManager?.configure(.dev, delegate: self)
         }
     }
 
-    func sendMessage(_ message: Message) {
-        dataManager?.sendMessage(message)
+    func sendMessage(_ message: Message?) {
+        guard let msg = message else { return }
+        dataManager?.sendMessage(msg)
     }
     
-    func insertOldMessages(_ messages: [Message]) {
-        if messages.isEmpty { return }
+    func sendImage(_ image: UIImage) {
         
-        messageList.insert(contentsOf: messages, at: 0)
-        
-        mainclv.performBatchUpdates({
-            (0..<messages.count).forEach {
-                mainclv.insertSections([$0])
-            }
-        }, completion: nil)
     }
     
     func addMessage(_ message: Message) {
@@ -133,11 +128,12 @@ final class ChatViewController: MessagesViewController, MessagesDataSource {
 // MARK: DataManagerDelegate
 extension ChatViewController: FIRChatDelegate {
     func onLoadMoreMessages(_ messages: [Message]) {
-        insertOldMessages(messages)
+        showError("Did not implement insert old messages yet !")
+//        insertOldMessages(messages)
     }
     
     func onReceiveMessage(_ message: Message) {
-        LOG("=> createdAt: \(message.createdAt)")
+        LOG("=> createdAt: \(message.sentDate)")
         addMessage(message)
     }
         
@@ -147,5 +143,6 @@ extension ChatViewController: FIRChatDelegate {
     
     func onError(_ error: Error?) {
         LOG("[ERROR] \(error?.localizedDescription ?? "")")
+        showError(error?.localizedDescription)
     }
 }

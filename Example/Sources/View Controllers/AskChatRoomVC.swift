@@ -15,6 +15,16 @@ class AskChatRoomVC: UIViewController {
         setup()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            if AppSetting.appContext == .automate {
+                self.tryToJoinChat("subscribeID")
+            }
+        }
+    }
+    
     func setup() {
         let btn = UIButton(type: .custom)
         self.view.addSubview(btn)

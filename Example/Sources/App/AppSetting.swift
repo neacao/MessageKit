@@ -12,6 +12,7 @@ enum AppContext: Int {
     case dev
     case test
     case release
+    case automate
 }
 
 final class AppSetting {
@@ -20,54 +21,58 @@ final class AppSetting {
         case userID
         case displayName
         case appContext
+        
+        var str: String {
+            return self.rawValue
+        }
     }
     
     static var displayName: String? {
         get {
-            return UserDefaults.standard.string(forKey: Keys.displayName.rawValue)
+            return UserDefaults.standard.string(forKey: Keys.displayName.str)
         }
         set {
             let defaults = UserDefaults.standard
             
             if let name = newValue {
-                defaults.setValue(name, forKey: Keys.displayName.rawValue)
+                defaults.setValue(name, forKey: Keys.displayName.str)
             } else {
-                defaults.removeObject(forKey: Keys.displayName.rawValue)
+                defaults.removeObject(forKey: Keys.displayName.str)
             }
         }
     }
     
     static var userID: String? {
         get {
-            return UserDefaults.standard.string(forKey: Keys.userID.rawValue)
+            return UserDefaults.standard.string(forKey: Keys.userID.str)
         }
         set {
             let defaults = UserDefaults.standard
             
             if let name = newValue {
-                defaults.setValue(name, forKey: Keys.userID.rawValue)
+                defaults.setValue(name, forKey: Keys.userID.str)
             } else {
-                defaults.removeObject(forKey: Keys.userID.rawValue)
+                defaults.removeObject(forKey: Keys.userID.str)
             }
         }
     }
     
     static var me: User {
-        let _name = displayName ?? "<unknown>"
+        let _name = displayName ?? "<unknownUserName>"
         let _userID = userID ?? UUID().uuidString
-        return User(id: _userID, name: _name)
+        return User(id: _userID, name: _name, avatarUrl: "")
     }
     
     static var appContext: AppContext {
         get {
-            let rawValue = UserDefaults.standard.integer(forKey: Keys.appContext.rawValue)
+            let rawValue = UserDefaults.standard.integer(forKey: Keys.appContext.str)
             let ret = AppContext(rawValue: rawValue)!
             return ret
         }
         set {
             let defaults = UserDefaults.standard
             let rawValue = newValue.rawValue
-            defaults.setValue(rawValue, forKey: Keys.appContext.rawValue)
+            defaults.setValue(rawValue, forKey: Keys.appContext.str)
         }
     }
 }

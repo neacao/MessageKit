@@ -12,29 +12,30 @@ struct User {
     
     let id: String
     let name: String
-    var avatarUrl: String?
+    let avatarUrl: String
     
-    init(id: String, name: String) {
+    init(id: String, name: String, avatarUrl: String) {
         self.id = id
         self.name = name
+        self.avatarUrl = avatarUrl
     }
     
-    // Remote data initial
     init?(json: [String: Any]?) {
-        guard let senderID = json?["senderID"] as? String,
-            let senderName = json?["senderName"] as? String
+        guard let senderID = json?[FIRChatKey.Sender.id.str] as? String,
+            let senderName = json?[FIRChatKey.Sender.name.str] as? String
             else { return nil }
-        self.id = senderID
-        self.name = senderName
-        self.avatarUrl = json?["avatarUrl"] as? String
+        
+        let avatarUrl = json?[FIRChatKey.Sender.avatarUrl.str] as? String ?? ""
+        self.init(id: senderID, name: senderName, avatarUrl: avatarUrl)
     }
 }
 
 extension User: DatabasePresentation {
     var representation: [String: Any] {
         return [
-            "senderID": id,
-            "senderName": name
+            FIRChatKey.Sender.id.str: id,
+            FIRChatKey.Sender.name.str: name,
+            FIRChatKey.Sender.avatarUrl.str: avatarUrl
         ]
     }
 }

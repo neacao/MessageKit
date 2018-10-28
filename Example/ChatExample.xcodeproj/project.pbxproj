@@ -25,6 +25,7 @@
 		90F61C0E217F2CCC0067FE6B /* FIRChat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90F61C0D217F2CCC0067FE6B /* FIRChat.swift */; };
 		90F61C10217F319E0067FE6B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 90F61C0F217F319D0067FE6B /* GoogleService-Info.plist */; };
 		90F658C021855D090058A055 /* AskChatRoomVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90F658BF21855D090058A055 /* AskChatRoomVC.swift */; };
+		90F658C3218587580058A055 /* FIRChat+Interface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90F658C2218587580058A055 /* FIRChat+Interface.swift */; };
 		90F7436021841CCE0045DBB0 /* FIRChat+Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90F7435F21841CCE0045DBB0 /* FIRChat+Helper.swift */; };
 		90F7A053218051680003BEE6 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90F7A052218051680003BEE6 /* Message.swift */; };
 		90F7A055218053180003BEE6 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90F7A054218053180003BEE6 /* User.swift */; };
@@ -96,6 +97,7 @@
 		90F61C0D217F2CCC0067FE6B /* FIRChat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FIRChat.swift; sourceTree = "<group>"; };
 		90F61C0F217F319D0067FE6B /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		90F658BF21855D090058A055 /* AskChatRoomVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AskChatRoomVC.swift; sourceTree = "<group>"; };
+		90F658C2218587580058A055 /* FIRChat+Interface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FIRChat+Interface.swift"; sourceTree = "<group>"; };
 		90F7435F21841CCE0045DBB0 /* FIRChat+Helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FIRChat+Helper.swift"; sourceTree = "<group>"; };
 		90F7A052218051680003BEE6 /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		90F7A054218053180003BEE6 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
@@ -254,6 +256,7 @@
 				90F61C0D217F2CCC0067FE6B /* FIRChat.swift */,
 				90F7A05E2180652B0003BEE6 /* FIRError.swift */,
 				90F7435F21841CCE0045DBB0 /* FIRChat+Helper.swift */,
+				90F658C2218587580058A055 /* FIRChat+Interface.swift */,
 			);
 			path = Firebase;
 			sourceTree = "<group>";
@@ -573,6 +576,7 @@
 				90F61C0E217F2CCC0067FE6B /* FIRChat.swift in Sources */,
 				385C2931211FF3630010B4BA /* UIColor+Extensions.swift in Sources */,
 				385C2932211FF3630010B4BA /* UIViewController+Extensions.swift in Sources */,
+				90F658C3218587580058A055 /* FIRChat+Interface.swift in Sources */,
 				90F423FE217C4A220063B561 /* ChatViewController+Delegate.swift in Sources */,
 				385C292B211FF3450010B4BA /* Settings+UserDefaults.swift in Sources */,
 				385C2945211FF38F0010B4BA /* NavigationController.swift in Sources */,

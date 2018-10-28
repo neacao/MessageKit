@@ -68,4 +68,18 @@ extension UIViewController {
         self.navigationItem.title = title
     }
     
+    func showError(_ message: String?, completion: (() -> Void)? = nil) {
+        guard let msg = message else {
+            completion?()
+            return
+        }
+        
+        let alertVC = UIAlertController(title: "Error", message: msg, preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "OK", style: .cancel) { _ in
+            completion?()
+        }
+        alertVC.addAction(okAction)
+        present(alertVC, animated: true, completion: nil)
+    }
+    
 }

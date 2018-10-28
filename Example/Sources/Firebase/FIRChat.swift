@@ -9,13 +9,6 @@
 import Firebase
 import FirebaseFirestore
 
-protocol FIRChatDelegate: class {
-    func onLoadMoreMessages(_ messages: [Message])
-    func onReceiveMessage(_ message: Message)
-    func onSendMessage(_ message: Message)
-    func onError(_ error: Error?)
-}
-
 class FIRChat: NSObject {
     /// In-app
     static let shared: FIRChat = FIRChat()
@@ -35,7 +28,7 @@ class FIRChat: NSObject {
     private var lastDocumentCached: QueryDocumentSnapshot!
     
     // Ensure that Firebase just configure at the first time
-    private var isConfigured: Bool! = false
+    private var isConfigured: Bool = false
 }
 
 // MARK: Public APIs
@@ -71,7 +64,7 @@ extension FIRChat {
         channelRef = db.collection(msgPath)
         
         channelListener = channelRef?
-            .order(by: MessageKeys.createdAt.rawValue, descending: false)
+            .order(by: FIRChatKey.Message.createdAt.str, descending: false)
             .addSnapshotListener { snapshot, error in
                 self.handleNewSnapshot(snapshot, error: error)
         }

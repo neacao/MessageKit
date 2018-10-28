@@ -69,18 +69,18 @@ extension ChatViewController: MessageLabelDelegate {
 // MARK: - MessageInputBarDelegate
 
 extension ChatViewController: MessageInputBarDelegate {
-    
     func messageInputBar(_ inputBar: MessageInputBar, didPressSendButtonWith text: String) {
-        inputBar.inputTextView.components.forEach {
-            if let str = $0 as? String {
-                let message = Message(content: str)
-                sendMessage(message)
-            }
-//            else if let img = component as? UIImage {
+        sendMessage(Message(content: text))
+//        inputBar.inputTextView.components.forEach {
+//            if let str = $0 as? String {
+//                let message = Message(content: str)
+//                sendMessage(message)
+//            }
+//            else if let img = $0 as? UIImage {
 //                let message = MockMessage(image: img, sender: currentSender(), messageId: UUID().uuidString, date: Date())
 //                insertMessage(message)
 //            }
-        }
+//        }
         
         inputBar.inputTextView.text = String()
         messagesCollectionView.scrollToBottom(animated: true)
@@ -117,7 +117,9 @@ extension ChatViewController: MessagesDisplayDelegate {
     func backgroundColor(for message: MessageType,
                          at indexPath: IndexPath,
                          in messagesCollectionView: MessagesCollectionView) -> UIColor {
-        return isFromCurrentSender(message: message) ? .primaryColor : UIColor(red: 230/255, green: 230/255, blue: 230/255, alpha: 1)
+        return isFromCurrentSender(message: message) ? .primaryColor : UIColor(red: 230.0/255,
+                                                                               green: 230.0/255,
+                                                                               blue: 230.0/255, alpha: 1)
     }
     
     func messageStyle(for message: MessageType,
