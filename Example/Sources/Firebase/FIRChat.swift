@@ -25,14 +25,17 @@ class FIRChat: NSObject {
     /// Firebase
     private var db: Firestore!
     
-    private var globalRef: CollectionReference?
     private var channelRef: CollectionReference?
     
-    private var globalListener: ListenerRegistration?
     private var channelListener: ListenerRegistration?
     
-    /// The start point (top cursor) to query more old messages
+    /// Helper
+    
+    // The start point (top cursor) to query more old messages
     private var lastDocumentCached: QueryDocumentSnapshot!
+    
+    // Ensure that Firebase just configure at the first time
+    private var isConfigured: Bool! = false
 }
 
 // MARK: Public APIs
@@ -42,7 +45,10 @@ extension FIRChat {
                    delegate: FIRChatDelegate?) {
         
         // Using default configuration of firebase
-        FirebaseApp.configure()
+        if !isConfigured {
+            isConfigured = true
+            FirebaseApp.configure()
+        }
         
         self.appContext = appContext
         self.delegate = delegate
@@ -57,23 +63,6 @@ extension FIRChat {
             - delegate: \(delegate.debugDescription))
             """)
     }
-    
-    // TODO:
-//    @discardableResult
-//    func selfSubscribe(_ userID: String) -> Self {
-//        globalRef = db.collection("users/\(userID)")
-//        globalListener = globalRef?.addSnapshotListener { snapshot, error in
-//            self.handleOldSnapshot(snapshot, error: error)
-//        }
-//
-//        LOG("""
-//            - userID: \(userID)
-//            - globalRef: \(globalRef.debugDescription)
-//            - globalListener: \(globalListener.debugDescription)")
-//            """)
-//
-//        return self
-//    }
     
     @discardableResult
     func subscribeChannel(_ channelID: String) -> Self {

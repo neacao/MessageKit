@@ -24,6 +24,7 @@
 		90F5BB5D217F5CE000956370 /* FIRChatTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90F5BB5C217F5CE000956370 /* FIRChatTest.swift */; };
 		90F61C0E217F2CCC0067FE6B /* FIRChat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90F61C0D217F2CCC0067FE6B /* FIRChat.swift */; };
 		90F61C10217F319E0067FE6B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 90F61C0F217F319D0067FE6B /* GoogleService-Info.plist */; };
+		90F658C021855D090058A055 /* AskChatRoomVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90F658BF21855D090058A055 /* AskChatRoomVC.swift */; };
 		90F7436021841CCE0045DBB0 /* FIRChat+Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90F7435F21841CCE0045DBB0 /* FIRChat+Helper.swift */; };
 		90F7A053218051680003BEE6 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90F7A052218051680003BEE6 /* Message.swift */; };
 		90F7A055218053180003BEE6 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90F7A054218053180003BEE6 /* User.swift */; };
@@ -94,6 +95,7 @@
 		90F5BB5C217F5CE000956370 /* FIRChatTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FIRChatTest.swift; sourceTree = "<group>"; };
 		90F61C0D217F2CCC0067FE6B /* FIRChat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FIRChat.swift; sourceTree = "<group>"; };
 		90F61C0F217F319D0067FE6B /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		90F658BF21855D090058A055 /* AskChatRoomVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AskChatRoomVC.swift; sourceTree = "<group>"; };
 		90F7435F21841CCE0045DBB0 /* FIRChat+Helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FIRChat+Helper.swift"; sourceTree = "<group>"; };
 		90F7A052218051680003BEE6 /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		90F7A054218053180003BEE6 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
@@ -164,11 +166,12 @@
 		385C2949211FF3930010B4BA /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				90F658BF21855D090058A055 /* AskChatRoomVC.swift */,
+				385C293E211FF38F0010B4BA /* NavigationController.swift */,
 				385C293B211FF38E0010B4BA /* ChatViewController.swift */,
 				90F423FB217C48C60063B561 /* ChatViewController+Configuration.swift */,
 				90F42401217C58550063B561 /* ChatViewController+DataSource.swift */,
 				90F423FD217C4A220063B561 /* ChatViewController+Delegate.swift */,
-				385C293E211FF38F0010B4BA /* NavigationController.swift */,
 			);
 			path = "View Controllers";
 			sourceTree = "<group>";
@@ -589,6 +592,7 @@
 				90F42402217C58550063B561 /* ChatViewController+DataSource.swift in Sources */,
 				90F7A055218053180003BEE6 /* User.swift in Sources */,
 				90F7A061218087320003BEE6 /* AppLog.swift in Sources */,
+				90F658C021855D090058A055 /* AskChatRoomVC.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

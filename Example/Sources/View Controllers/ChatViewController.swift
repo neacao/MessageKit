@@ -38,6 +38,7 @@ final class ChatViewController: MessagesViewController, MessagesDataSource {
     }()
     
     var messageList: [Message]!
+    var roomID: String?
     
     private var dataManager: FIRChat?
     
@@ -52,10 +53,18 @@ final class ChatViewController: MessagesViewController, MessagesDataSource {
         self.setupManager()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        if let _roomID = roomID {
+            dataManager?.subscribeChannel(_roomID)
+        }
+    }
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        dataManager?.subscribeChannel("subscribeID")
+        mainclv.scrollToBottom(animated: true)
     }
     
     // MARK: - Helpers
@@ -67,11 +76,6 @@ final class ChatViewController: MessagesViewController, MessagesDataSource {
             dataManager = FIRChat.shared
             dataManager?.configure(.dev, delegate: self)
         }
-    }
-    
-    @objc
-    func loadMoreMessages() {
-        
     }
 
     func sendMessage(_ message: Message) {
@@ -87,9 +91,6 @@ final class ChatViewController: MessagesViewController, MessagesDataSource {
             (0..<messages.count).forEach {
                 mainclv.insertSections([$0])
             }
-//            if messageList.count >= 2 {
-//                mainclv.reloadSections([messageList.count - 2])
-//            }
         }, completion: nil)
     }
     
@@ -111,6 +112,7 @@ final class ChatViewController: MessagesViewController, MessagesDataSource {
 
     // MARK: UICollectionViewDataSource
     
+    // NOTE: Showing system message purposed
     public override func collectionView(_ collectionView: UICollectionView,
                                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         

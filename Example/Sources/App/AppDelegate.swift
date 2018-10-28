@@ -33,15 +33,16 @@ final internal class AppDelegate: UIResponder, UIApplicationDelegate {
         setup()
         
         window = UIWindow(frame: UIScreen.main.bounds)
-        window?.rootViewController = NavigationController(rootViewController: ChatViewController())
+        window?.rootViewController = NavigationController(rootViewController: AskChatRoomVC())
         window?.makeKeyAndVisible()
         
         return true
     }
     
     func setup() {
-        AppSetting.displayName = "neacao"
-        AppSetting.userID = "neacaoID"
+        
+        AppSetting.displayName = TARGET_OS_SIMULATOR != 0 ? "simulator" : "neacao"
+        AppSetting.userID = TARGET_OS_SIMULATOR != 0 ? "simulatorID" : "neacaoID"
         AppSetting.appContext = .dev
     }
 
