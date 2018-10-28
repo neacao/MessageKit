@@ -27,9 +27,6 @@ extension ChatViewController {
         scrollsToBottomOnKeyboardBeginsEditing = true // default false
         maintainPositionOnKeyboardFrameChanged = true // default false
         
-        messagesCollectionView.addSubview(refreshControl)
-        refreshControl.addTarget(self, action: #selector(loadMoreMessages), for: .valueChanged)
-        
         let layout = messagesCollectionView.collectionViewLayout as? MessagesCollectionViewFlowLayout
         layout?.sectionInset = UIEdgeInsets(top: 1, left: 8, bottom: 1, right: 8)
         

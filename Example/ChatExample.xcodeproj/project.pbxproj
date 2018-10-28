@@ -21,10 +21,10 @@
 		90F423FC217C48C60063B561 /* ChatViewController+Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90F423FB217C48C60063B561 /* ChatViewController+Configuration.swift */; };
 		90F423FE217C4A220063B561 /* ChatViewController+Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90F423FD217C4A220063B561 /* ChatViewController+Delegate.swift */; };
 		90F42402217C58550063B561 /* ChatViewController+DataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90F42401217C58550063B561 /* ChatViewController+DataSource.swift */; };
-		90F5BB5B217F5A1D00956370 /* FIRChat+Addictions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90F5BB5A217F5A1D00956370 /* FIRChat+Addictions.swift */; };
 		90F5BB5D217F5CE000956370 /* FIRChatTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90F5BB5C217F5CE000956370 /* FIRChatTest.swift */; };
 		90F61C0E217F2CCC0067FE6B /* FIRChat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90F61C0D217F2CCC0067FE6B /* FIRChat.swift */; };
 		90F61C10217F319E0067FE6B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 90F61C0F217F319D0067FE6B /* GoogleService-Info.plist */; };
+		90F7436021841CCE0045DBB0 /* FIRChat+Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90F7435F21841CCE0045DBB0 /* FIRChat+Helper.swift */; };
 		90F7A053218051680003BEE6 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90F7A052218051680003BEE6 /* Message.swift */; };
 		90F7A055218053180003BEE6 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90F7A054218053180003BEE6 /* User.swift */; };
 		90F7A058218058910003BEE6 /* AppSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90F7A057218058910003BEE6 /* AppSetting.swift */; };
@@ -91,10 +91,10 @@
 		90F423FB217C48C60063B561 /* ChatViewController+Configuration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ChatViewController+Configuration.swift"; sourceTree = "<group>"; };
 		90F423FD217C4A220063B561 /* ChatViewController+Delegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ChatViewController+Delegate.swift"; sourceTree = "<group>"; };
 		90F42401217C58550063B561 /* ChatViewController+DataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ChatViewController+DataSource.swift"; sourceTree = "<group>"; };
-		90F5BB5A217F5A1D00956370 /* FIRChat+Addictions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FIRChat+Addictions.swift"; sourceTree = "<group>"; };
 		90F5BB5C217F5CE000956370 /* FIRChatTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FIRChatTest.swift; sourceTree = "<group>"; };
 		90F61C0D217F2CCC0067FE6B /* FIRChat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FIRChat.swift; sourceTree = "<group>"; };
 		90F61C0F217F319D0067FE6B /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		90F7435F21841CCE0045DBB0 /* FIRChat+Helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FIRChat+Helper.swift"; sourceTree = "<group>"; };
 		90F7A052218051680003BEE6 /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		90F7A054218053180003BEE6 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		90F7A057218058910003BEE6 /* AppSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSetting.swift; sourceTree = "<group>"; };
@@ -267,8 +267,8 @@
 			isa = PBXGroup;
 			children = (
 				90F61C0D217F2CCC0067FE6B /* FIRChat.swift */,
-				90F5BB5A217F5A1D00956370 /* FIRChat+Addictions.swift */,
 				90F7A05E2180652B0003BEE6 /* FIRError.swift */,
+				90F7435F21841CCE0045DBB0 /* FIRChat+Helper.swift */,
 			);
 			path = Firebase;
 			sourceTree = "<group>";
@@ -573,6 +573,7 @@
 				90F7A058218058910003BEE6 /* AppSetting.swift in Sources */,
 				385C2922211FF32E0010B4BA /* CustomCell.swift in Sources */,
 				90F7A05F2180652B0003BEE6 /* FIRError.swift in Sources */,
+				90F7436021841CCE0045DBB0 /* FIRChat+Helper.swift in Sources */,
 				385C2942211FF38F0010B4BA /* ChatViewController.swift in Sources */,
 				90F61C0E217F2CCC0067FE6B /* FIRChat.swift in Sources */,
 				385C2931211FF3630010B4BA /* UIColor+Extensions.swift in Sources */,
@@ -580,7 +581,6 @@
 				90F423FE217C4A220063B561 /* ChatViewController+Delegate.swift in Sources */,
 				385C292B211FF3450010B4BA /* Settings+UserDefaults.swift in Sources */,
 				385C2945211FF38F0010B4BA /* NavigationController.swift in Sources */,
-				90F5BB5B217F5A1D00956370 /* FIRChat+Addictions.swift in Sources */,
 				90F7A05A21805F0F0003BEE6 /* DatabasePresentation.swift in Sources */,
 				90F423FC217C48C60063B561 /* ChatViewController+Configuration.swift in Sources */,
 				882B5E811CF7D53600B6E160 /* AppDelegate.swift in Sources */,

@@ -8,7 +8,8 @@
 
 import Foundation
 
-public func LOG(_ message: String, file: String = #file, function: String = #function)  {
-    let message = "[NEA] \(file) \(function) : \(message)"
+public func LOG(_ message: String, file: String = #file, function: String = #function) {
+    let prefix = (AppSetting.appContext == .test ? "[TEST]" : "[NEA]")
+    let message = "\(prefix) \(file) \(function) : \(message)"
     print(message)
 }

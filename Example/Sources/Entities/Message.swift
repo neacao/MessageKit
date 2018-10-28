@@ -7,7 +7,6 @@
 //
 
 import MessageKit
-import FirebaseFirestore
 
 struct Message {
     
@@ -28,15 +27,13 @@ struct Message {
         self.owner = owner
     }
     
-    init?(document: QueryDocumentSnapshot) {
-        let data = document.data()
-        
-        guard let owner = User(json: data),
-            let content = data["content"] as? String,
-            let createdAt = (data["createdAt"] as? Timestamp)?.dateValue()
+    init?(id: String, json: [String: Any]?) {
+        guard let owner = User(json: json),
+            let content = json?["content"] as? String,
+            let createdAt = Date.findCreatedAt(from: json)
             else { return nil }
         
-        self.id = document.documentID
+        self.id = id
         self.owner = owner
         self.content = content
         self.createdAt = createdAt

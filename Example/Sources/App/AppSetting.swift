@@ -8,11 +8,18 @@
 
 import Foundation
 
+enum AppContext: Int {
+    case dev
+    case test
+    case release
+}
+
 final class AppSetting {
     
     private enum Keys: String {
         case userID
         case displayName
+        case appContext
     }
     
     static var displayName: String? {
@@ -51,4 +58,16 @@ final class AppSetting {
         return User(id: _userID, name: _name)
     }
     
+    static var appContext: AppContext {
+        get {
+            let rawValue = UserDefaults.standard.integer(forKey: Keys.appContext.rawValue)
+            let ret = AppContext(rawValue: rawValue)!
+            return ret
+        }
+        set {
+            let defaults = UserDefaults.standard
+            let rawValue = newValue.rawValue
+            defaults.setValue(rawValue, forKey: Keys.appContext.rawValue)
+        }
+    }
 }

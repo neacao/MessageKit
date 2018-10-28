@@ -23,8 +23,6 @@
  */
 
 import UIKit
-import Firebase
-
 @UIApplicationMain
 final internal class AppDelegate: UIResponder, UIApplicationDelegate {
 
@@ -42,9 +40,9 @@ final internal class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func setup() {
-        FirebaseApp.configure()
         AppSetting.displayName = "neacao"
         AppSetting.userID = "neacaoID"
+        AppSetting.appContext = .dev
     }
 
 }

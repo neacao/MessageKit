@@ -11,7 +11,7 @@ loop_push_message() {
 		-H "Content-Type: application/json" \
 		-d '{
 		"fields": {
-		"content": { "stringValue": "message of bot at '`date +%s`'" },
+		"content": { "stringValue": "message of bot index: '`echo $i`' at '`date +%s`'" },
 		"senderID": { "stringValue": "botID" }, 
 		"senderName": { "stringValue": "botName" }, 
 		"createdAt": { "timestampValue": "'`date +"%Y-%m-%dT%H:%M:%S.000000000Z"`'" }

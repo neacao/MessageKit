@@ -6,23 +6,24 @@
 //  Copyright © 2018 MessageKit. All rights reserved.
 //
 
+import Firebase
 import FirebaseFirestore
 
 protocol FIRChatDelegate: class {
+    func onLoadMoreMessages(_ messages: [Message])
     func onReceiveMessage(_ message: Message)
     func onSendMessage(_ message: Message)
     func onError(_ error: Error?)
 }
 
 class FIRChat: NSObject {
-    
+    /// In-app
     static let shared: FIRChat = FIRChat()
-
-    // MARK: Properties
-    
     private var appContext: AppContext!
+    private weak var delegate: FIRChatDelegate?
     
-    private let db: Firestore = Firestore.firestore()
+    /// Firebase
+    private var db: Firestore!
     
     private var globalRef: CollectionReference?
     private var channelRef: CollectionReference?
@@ -30,53 +31,60 @@ class FIRChat: NSObject {
     private var globalListener: ListenerRegistration?
     private var channelListener: ListenerRegistration?
     
-    private weak var delegate: FIRChatDelegate?
-    
-    // MARK: Public APIs
-    
+    /// The start point (top cursor) to query more old messages
+    private var lastDocumentCached: QueryDocumentSnapshot!
+}
+
+// MARK: Public APIs
+
+extension FIRChat {
     func configure(_ appContext: AppContext,
-                   googleInfoFilePath path: String?,
                    delegate: FIRChatDelegate?) {
+        
+        // Using default configuration of firebase
+        FirebaseApp.configure()
         
         self.appContext = appContext
         self.delegate = delegate
-        let settings = db.settings
+        self.db = Firestore.firestore()
+        
+        let settings = self.db.settings
         settings.areTimestampsInSnapshotsEnabled = true
-        db.settings = settings
+        self.db.settings = settings
         
         LOG("""
             - appContext: \(appContext.rawValue)
-            - delegate: \(delegate.debugDescription)
-            - googleFilePath: \(path ?? "nil")
+            - delegate: \(delegate.debugDescription))
             """)
     }
     
-    @discardableResult
-    func selfSubscribe(_ userID: String) -> Self {
-        globalRef = db.collection("users/\(userID)")
-        globalListener = globalRef?.addSnapshotListener { snapshot, error in
-            self.handleSnapshot(snapshot, error: error)
-        }
-        
-        LOG("""
-            - userID: \(userID)
-            - globalRef: \(globalRef.debugDescription)
-            - globalListener: \(globalListener.debugDescription)")
-            """)
-        
-        return self
-    }
+    // TODO:
+//    @discardableResult
+//    func selfSubscribe(_ userID: String) -> Self {
+//        globalRef = db.collection("users/\(userID)")
+//        globalListener = globalRef?.addSnapshotListener { snapshot, error in
+//            self.handleOldSnapshot(snapshot, error: error)
+//        }
+//
+//        LOG("""
+//            - userID: \(userID)
+//            - globalRef: \(globalRef.debugDescription)
+//            - globalListener: \(globalListener.debugDescription)")
+//            """)
+//
+//        return self
+//    }
     
     @discardableResult
     func subscribeChannel(_ channelID: String) -> Self {
-        if appContext == .dev {
-            channelRef = db.collection("channelsTest/\(channelID)/messages")
-        } else if appContext == .release {
-            channelRef = db.collection("channels/\(channelID)/messages")
-        }
+        let channel = (appContext == .release ? "channels" : "channelsTest")
+        let msgPath = "\(channel)/\(channelID)/messages"
+        channelRef = db.collection(msgPath)
         
-        channelListener = channelRef?.addSnapshotListener { snapshot, error in
-            self.handleSnapshot(snapshot, error: error)
+        channelListener = channelRef?
+            .order(by: MessageKeys.createdAt.rawValue, descending: false)
+            .addSnapshotListener { snapshot, error in
+                self.handleNewSnapshot(snapshot, error: error)
         }
         
         LOG("""
@@ -108,7 +116,6 @@ class FIRChat: NSObject {
         ref.addDocument(data: message.representation, completion: { (error) in
             if let _error = error {
                 self.delegate?.onError(_error)
-                
             } else {
                 self.delegate?.onSendMessage(message)
             }
@@ -116,10 +123,27 @@ class FIRChat: NSObject {
     }
 }
 
-// MARK: FIRChat Private APIs
+// MARK: Private APIs
 
 extension FIRChat {
-    func handleSnapshot(_ snapshot: QuerySnapshot?, error: Error?) {
+    func handleOldSnapshot(_ snapshot: QuerySnapshot?, error: Error?) {
+        if let _error = error {
+            self.delegate?.onError(_error)
+            return
+        }
+        
+        let messages: [Message] = snapshot?.documents.compactMap { change in
+            let id = change.documentID
+            let json = change.data()
+            return Message(id: id, json: json)
+        } ?? []
+        
+        if messages.isEmpty { return }
+        
+        self.delegate?.onLoadMoreMessages(messages)
+    }
+    
+    func handleNewSnapshot(_ snapshot: QuerySnapshot?, error: Error?) {
         if let _error = error {
             self.delegate?.onError(_error)
             return
@@ -130,23 +154,22 @@ extension FIRChat {
         }
     }
     
-    func handleDocumentChange(_ change: DocumentChange) {
-        guard let message = Message(document: change.document) else {
-            let error = FIRError.invalidMessagePackage(change.document.data()).error
+    func handleDocumentChange(_ diff: DocumentChange) {
+        let document = diff.document
+        let json = document.data()
+        let id = document.documentID
+        
+        guard let message = Message(id: id, json: json) else {
+            let error = FIRError.invalidMessagePackage(document.data()).error
             self.delegate?.onError(error)
             return
         }
         
-        switch change.type {
+        switch diff.type {
         case .added:
             self.delegate?.onReceiveMessage(message)
             
-        case .modified:
-            //TODO:
-            break
-            
-        case .removed:
-            //TODO:
+        default: // Will support modified/removed later
             break
         }
     }

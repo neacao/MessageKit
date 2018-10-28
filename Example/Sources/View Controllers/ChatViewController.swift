@@ -27,9 +27,9 @@ import MessageKit
 
 final class ChatViewController: MessagesViewController, MessagesDataSource {
     
-    let outgoingAvatarOverlap: CGFloat = 17.5
+    weak var mainclv: MessagesCollectionView!
     
-    let refreshControl = UIRefreshControl()
+    let outgoingAvatarOverlap: CGFloat = 17.5
     
     let formatter: DateFormatter = {
         let formatter = DateFormatter()
@@ -45,6 +45,7 @@ final class ChatViewController: MessagesViewController, MessagesDataSource {
         messagesCollectionView = MessagesCollectionView(frame: .zero,
                                                         collectionViewLayout: CustomMessagesFlowLayout())
         messagesCollectionView.register(CustomCell.self)
+        mainclv = messagesCollectionView
         
         super.viewDidLoad()
         self.setupUI()
@@ -61,47 +62,49 @@ final class ChatViewController: MessagesViewController, MessagesDataSource {
     
     func setupManager() {
         messageList = []
-        dataManager = FIRChat.shared
-        dataManager?.configure(.dev, googleInfoFilePath: nil, delegate: self)
+        
+        if AppSetting.appContext != .test {
+            dataManager = FIRChat.shared
+            dataManager?.configure(.dev, delegate: self)
+        }
     }
     
     @objc
     func loadMoreMessages() {
-        refreshControl.endRefreshing()
         
-        // Load through network
-        // Insert to first index of local list
-        // Make list reload & keep offset
-        // Force refresh control end refreshing
-        
-//        DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: .now() + 1) {
-//            SampleData.shared.getAdvancedMessages(count: 20) { messages in
-//                self.messageList.insert(contentsOf: messages, at: 0)
-//
-//                DispatchQueue.main.async {
-//                    self.messagesCollectionView.reloadDataAndKeepOffset()
-//                    self.refreshControl.endRefreshing()
-//                }
-//            }
-//        }
     }
 
     func sendMessage(_ message: Message) {
         dataManager?.sendMessage(message)
     }
     
-    func insertMessage(_ message: Message) {
+    func insertOldMessages(_ messages: [Message]) {
+        if messages.isEmpty { return }
+        
+        messageList.insert(contentsOf: messages, at: 0)
+        
+        mainclv.performBatchUpdates({
+            (0..<messages.count).forEach {
+                mainclv.insertSections([$0])
+            }
+//            if messageList.count >= 2 {
+//                mainclv.reloadSections([messageList.count - 2])
+//            }
+        }, completion: nil)
+    }
+    
+    func addMessage(_ message: Message) {
         messageList.append(message)
         
         // Reload last section to update header/footer labels and insert a new one
-        messagesCollectionView.performBatchUpdates({
-            messagesCollectionView.insertSections([messageList.count - 1])
+        mainclv.performBatchUpdates({
+            mainclv.insertSections([messageList.count - 1])
             if messageList.count >= 2 {
-                messagesCollectionView.reloadSections([messageList.count - 2])
+                mainclv.reloadSections([messageList.count - 2])
             }
         }, completion: { [weak self] _ in
             if self?.isLastSectionVisible() == true {
-                self?.messagesCollectionView.scrollToBottom(animated: true)
+                self?.mainclv.scrollToBottom(animated: true)
             }
         })
     }
@@ -111,14 +114,14 @@ final class ChatViewController: MessagesViewController, MessagesDataSource {
     public override func collectionView(_ collectionView: UICollectionView,
                                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        guard let messagesDataSource = messagesCollectionView.messagesDataSource else {
+        guard let messagesDataSource = mainclv.messagesDataSource else {
             fatalError("Ouch. nil data source for messages")
         }
         
-        let message = messagesDataSource.messageForItem(at: indexPath, in: messagesCollectionView)
+        let message = messagesDataSource.messageForItem(at: indexPath, in: mainclv)
         if case .custom = message.kind {
-            let cell = messagesCollectionView.dequeueReusableCell(CustomCell.self, for: indexPath)
-            cell.configure(with: message, at: indexPath, and: messagesCollectionView)
+            let cell = mainclv.dequeueReusableCell(CustomCell.self, for: indexPath)
+            cell.configure(with: message, at: indexPath, and: mainclv)
             return cell
         }
         return super.collectionView(collectionView, cellForItemAt: indexPath)
@@ -134,7 +137,7 @@ extension ChatViewController {
         
         let lastIndexPath = IndexPath(item: 0, section: messageList.count - 1)
         
-        return messagesCollectionView.indexPathsForVisibleItems.contains(lastIndexPath)
+        return mainclv.indexPathsForVisibleItems.contains(lastIndexPath)
     }
     
     func isTimeLabelVisible(at indexPath: IndexPath) -> Bool {
@@ -158,8 +161,13 @@ extension ChatViewController {
 
 // MARK: DataManagerDelegate
 extension ChatViewController: FIRChatDelegate {
+    func onLoadMoreMessages(_ messages: [Message]) {
+        insertOldMessages(messages)
+    }
+    
     func onReceiveMessage(_ message: Message) {
-        insertMessage(message)
+        LOG("=> createdAt: \(message.createdAt)")
+        addMessage(message)
     }
         
     func onSendMessage(_ message: Message) {
